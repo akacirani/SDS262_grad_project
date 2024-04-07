@@ -1,6 +1,4 @@
 # SDS262_grad_project
-
-# sds262_GradProject
 Graduate project by Kimia S. and Arlind K.
 
 Proposal:
