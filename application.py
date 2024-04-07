@@ -64,15 +64,23 @@ def generate_llama2_response(prompt_input):
 # Function for generating Lama2 response using the predifened Events list from all 4 websites
 def generate_llama2_response_with_list(final_list, prompt_input):
     string_dialogue = "You are a helpful assistant. You do not respond as 'User' or pretend to be 'User'. You only respond once as 'Assistant'."
-    for message_dict in final_list:
-        if message_dict["role"] == "user":
-            string_dialogue += "User: " + message_dict["content"] + "\n\n"
-        else:
-            string_dialogue += "Assistant: " + message_dict["content"] + "\n\n"
-    output = replicate.run(llm, 
-                           input={"prompt": f"{string_dialogue} {prompt_input} Assistant: ",
-                                  "temperature":temperature, "top_p":top_p, "max_length":max_length, "repetition_penalty":1})
-    return output
+    try:
+        for message_dict in final_list:
+            if "role" in message_dict and "content" in message_dict:
+                if message_dict["role"] == "user":
+                    string_dialogue += "User: " + message_dict["content"] + "\n\n"
+                else:
+                    string_dialogue += "Assistant: " + message_dict["content"] + "\n\n"
+            else:
+                # Handle cases where the dictionary doesn't have expected keys
+                pass
+        output = replicate.run(llm, 
+                               input={"prompt": f"{string_dialogue} {prompt_input} Assistant: ",
+                                      "temperature":temperature, "top_p":top_p, "max_length":max_length, "repetition_penalty":1})
+        return output
+    except Exception as e:
+        return f"Error: {e}"
+    
 
 # User-provided prompt
 if prompt := st.chat_input(disabled=not replicate_api):
