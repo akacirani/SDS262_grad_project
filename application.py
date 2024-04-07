@@ -4,7 +4,7 @@ import streamlit as st
 import replicate
 import os
 
-from extract_list import final_list
+from collecting_info import final_list
 
 
 # App title
